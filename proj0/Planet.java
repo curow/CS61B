@@ -1,4 +1,5 @@
 public class Planet {
+     static final double G = 6.67e-11;
      public double xxPos;
      public double yyPos;
      public double xxVel;
@@ -28,5 +29,10 @@ public class Planet {
           double dx = xxPos - b.xxPos;
           double dy = yyPos - b.yyPos;
           return Math.sqrt(dx * dx + dy * dy);
+     }
+
+     public double calcForceExertedBy(Planet b) {
+          double distance = this.calcDistance(b);
+          return G * mass * b.mass / (distance * distance);
      }
 }
