@@ -16,15 +16,17 @@ public class Planet {
      }
 
      public Planet(Planet b) {
-        xxPos = b.xxPos;
-        yyPos = b.yyPos;
-        xxVel = b.xxVel;
-        yyVel = b.yyVel;
-        mass = b.mass;
-        imgFileName = b.imgFileName;
-   }
+          xxPos = b.xxPos;
+          yyPos = b.yyPos;
+          xxVel = b.xxVel;
+          yyVel = b.yyVel;
+          mass = b.mass;
+          imgFileName = b.imgFileName;
+     }
 
-   public double calcDistance(Planet b) {
-        return Math.sqrt(Math.pow(xxPos - b.xxPos, 2) + Math.pow(yyPos - b.yyPos, 2));
-   }
+     public double calcDistance(Planet b) {
+          double dx = xxPos - b.xxPos;
+          double dy = yyPos - b.yyPos;
+          return Math.sqrt(dx * dx + dy * dy);
+     }
 }
