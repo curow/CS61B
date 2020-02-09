@@ -26,7 +26,7 @@ public class NBody {
                 planet.draw();
             }
             StdDraw.show();
-            StdDraw.pause(10);
+            StdDraw.pause(5);
             time += dt;
         }
         StdOut.printf("%d\n", allPlanets.length);
