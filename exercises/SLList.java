@@ -1,0 +1,67 @@
+public class SLList {
+    private static class IntNode {
+        int item;
+        IntNode next;
+        IntNode(int x, IntNode nextIntNode) {
+            item = x;
+            next = nextIntNode;
+        }
+    }
+
+    private IntNode first;
+    private int size;
+
+    public SLList(int x) {
+        first = new IntNode(x, null);
+        size = 1;
+    }
+
+    public void addFirst(int x) {
+        first = new IntNode(x, first);
+        size++;
+    }
+
+    public int getFirst() {
+        return first.item;
+    }
+    
+    private static int size(IntNode p) {
+        if (p.next == null) {
+            return 1;
+        } else {
+            return 1 + size(p.next);
+        }
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public int sizeIterative() {
+        int totalSize = 0;
+        IntNode p = first;
+        while (p != null) {
+            totalSize++;
+            p = p.next;
+        }
+        return totalSize;
+    }
+
+    public void addLast(int x) {
+        IntNode p = first;
+        while (p.next != null) {
+            p = p.next;
+        }
+        p.next = new IntNode(x, null);
+        size++;
+    }
+
+    public static void main(String[] args) {
+        SLList L = new SLList(10);
+        L.addFirst(3);
+        L.addFirst(5);
+        System.out.println(L.getFirst());
+        System.out.println(L.sizeIterative());
+        System.out.println(L.size());
+    }
+}
