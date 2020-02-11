@@ -8,49 +8,46 @@ public class SLList {
         }
     }
 
-    private IntNode first;
-    private int size;
+    /* The first item (if it exists) is at sentinel.next,
+    sentinel.item caches the size of SLList. */
+    private IntNode sentinel;
 
     public SLList() {
-        first = null;
-        size = 0;
+        sentinel = new IntNode(0, null);
     }
 
     public SLList(int x) {
-        first = new IntNode(x, null);
-        size = 1;
+        sentinel = new IntNode(1, null);
+        sentinel.next = new IntNode(x, null);
     }
 
     public void addFirst(int x) {
-        first = new IntNode(x, first);
-        size++;
+        sentinel.item++;
+        sentinel.next = new IntNode(x, sentinel.next);
     }
 
     public int getFirst() {
-        return first.item;
+        return sentinel.next.item;
     }
     
     public int size() {
-        return size;
+        return sentinel.item;
     }
 
     public void addLast(int x) {
-        IntNode p = first;
-        if (p == null) {
-            first = new IntNode(x, null);
-            return;
-        }
+        sentinel.item++;
+        IntNode p = sentinel;
         while (p.next != null) {
             p = p.next;
         }
         p.next = new IntNode(x, null);
-        size++;
     }
 
     public static void main(String[] args) {
-        SLList L = new SLList(10);
+        SLList L = new SLList();
         L.addFirst(3);
         L.addFirst(5);
+        L.addLast(32);
         System.out.println(L.getFirst());
         System.out.println(L.size());
     }
