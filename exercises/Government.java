@@ -35,25 +35,25 @@ public class Government {
 		}
 	}
 
-	public static class King {
+	public class King {
 		public void doStuff() {
 			spend();			
 		}
 	}
 
-	public static class Mayor {
+	public class Mayor {
 		public void doStuff() {
 			tax();			
 		}
 	}
 
-	public static class Accountant {
+	public class Accountant {
 		public void doStuff() {
 			report();			
 		}
 	}
 
-	public static class Thief {
+	public class Thief {
 		public void doStuff() {
 			treasury = 0;			
 		}
