@@ -33,6 +33,12 @@ public class IntList {
         }
     }
 
+    public void addFirst(int item) {
+        IntList p = new IntList(first, rest);
+        first = item;
+        rest = p;
+    }
+
     public static IntList square(IntList L) {
         if (L == null) {
             return null;
@@ -56,6 +62,7 @@ public class IntList {
         IntList L = new IntList(5, null);
         L = new IntList(10, L);
         L = new IntList(15, L);
+        L.addFirst(77);
         System.out.println(L.first);
         System.out.println(L.size());
         System.out.println(L.iterativeSize());
