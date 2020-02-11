@@ -25,26 +25,8 @@ public class SLList {
         return first.item;
     }
     
-    private static int size(IntNode p) {
-        if (p.next == null) {
-            return 1;
-        } else {
-            return 1 + size(p.next);
-        }
-    }
-
     public int size() {
         return size;
-    }
-
-    public int sizeIterative() {
-        int totalSize = 0;
-        IntNode p = first;
-        while (p != null) {
-            totalSize++;
-            p = p.next;
-        }
-        return totalSize;
     }
 
     public void addLast(int x) {
