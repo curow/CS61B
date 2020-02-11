@@ -33,6 +33,25 @@ public class IntList {
         }
     }
 
+    public static IntList square(IntList L) {
+        if (L == null) {
+            return null;
+        } else {
+            IntList rest = square(L.rest);
+            return new IntList(L.first * L.first, rest);
+        }
+    }
+
+    public static IntList squareMutative(IntList L) {
+        if (L == null) {
+            return null;
+        } else {
+            L.first *= L.first;
+            L.rest = squareMutative(L.rest);
+            return L;
+        }
+    }
+
     public static void main(String[] args) {
         IntList L = new IntList(5, null);
         L = new IntList(10, L);
