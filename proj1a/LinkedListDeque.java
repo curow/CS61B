@@ -31,14 +31,6 @@ public class LinkedListDeque<T> {
         ListNode prevFirst = sentinel.next;
         sentinel.next = new ListNode(item, sentinel, prevFirst);
         prevFirst.prev = sentinel.next;
-//        if (isEmpty()) {
-//            sentinel.next = new ListNode(item, sentinel, sentinel);
-//            sentinel.prev = sentinel.next;
-//        } else {
-//            ListNode prevFirst = sentinel.next;
-//            sentinel.next = new ListNode(item, sentinel, prevFirst);
-//            prevFirst.prev = sentinel.next;
-//        }
     }
 
     public void addLast(T item) {
@@ -46,19 +38,9 @@ public class LinkedListDeque<T> {
         ListNode prevLast = sentinel.prev;
         sentinel.prev = new ListNode(item, prevLast, sentinel);
         prevLast.next = sentinel.prev;
-//        if (isEmpty()) {
-//            sentinel.prev = new ListNode(item, sentinel, sentinel);
-//            sentinel.next = sentinel.prev;
-//        } else {
-//            ListNode prevLast = sentinel.prev;
-//            sentinel.prev = new ListNode(item, prevLast, sentinel);
-//            prevLast.next = sentinel.prev;
-//        }
     }
 
     public  boolean isEmpty() {
-//        return sentinel.next == sentinel
-//                && sentinel.prev == sentinel;
         return size == 0;
     }
 
