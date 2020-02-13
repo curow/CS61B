@@ -79,14 +79,16 @@ public class LinkedListDequeTest {
 		// should not be empty 
 		passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
-		lld1.removeFirst();
-		// should be empty 
+		passed = checkEqual(10, lld1.removeFirst()) && passed;
+		lld1.addFirst(20);
+		passed = checkEqual(20, lld1.removeLast()) && passed;
+
+		// should be empty
 		passed = checkEmpty(true, lld1.isEmpty()) && passed;
 
 		printTestStatus(passed);
 	}
 
-	/** Adds three item, then get the 2-th item, and ensures that get works properly */
 	public static void getTest() {
 
 		System.out.println("Running get test.");
@@ -111,10 +113,34 @@ public class LinkedListDequeTest {
 
 	}
 
+	public static void getRecursiveTest() {
+
+		System.out.println("Running get test.");
+
+		LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+		boolean passed = checkEmpty(true, lld1.isEmpty());
+
+		lld1.addLast(10);
+		lld1.printDeque();
+		passed = checkEqual(10, lld1.getRecursive(0)) && passed;
+		lld1.addLast(20);
+		lld1.printDeque();
+		passed = checkEqual(10, lld1.getRecursive(0)) && passed;
+		passed = checkEqual(20, lld1.getRecursive(1)) && passed;
+		lld1.addLast(30);
+		lld1.printDeque();
+		passed = checkEqual(10, lld1.getRecursive(0)) && passed;
+		passed = checkEqual(20, lld1.getRecursive(1)) && passed;
+		passed = checkEqual(30, lld1.getRecursive(2)) && passed;
+
+		printTestStatus(passed);
+
+	}
 	public static void main(String[] args) {
 		System.out.println("Running tests.\n");
 		addIsEmptySizeTest();
 		addRemoveTest();
 		getTest();
+		getRecursiveTest();
 	}
 } 
