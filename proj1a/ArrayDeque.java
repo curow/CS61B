@@ -7,8 +7,8 @@ public class ArrayDeque<T> {
     public ArrayDeque() {
         size = 0;
         items = (T[]) new Object[8];
-        nextFirst = 3;
-        nextLast = 4;
+        nextFirst = 0;
+        nextLast = 1;
     }
 
     public int size() {
@@ -30,8 +30,8 @@ public class ArrayDeque<T> {
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
         int front = addThenModuloByLength(nextFirst, 1);
-        int newNextFirst = 3;
-        int newNextLast = 4;
+        int newNextFirst = 0;
+        int newNextLast = 1;
         for (int i = 0; i < size; i++) {
             a[newNextLast] = items[front];
             newNextLast = addThenModulo(newNextLast, 1, capacity);
@@ -111,36 +111,35 @@ public class ArrayDeque<T> {
         return items[front + index];
     }
 
-    public static void main(String[] args) {
-        ArrayDeque<Integer> L = new ArrayDeque<>();
-        System.out.println(L.isEmpty());
-        L.addFirst(4);
-        L.addFirst(3);
-        L.addFirst(2);
-        L.addLast(5);
-        L.addLast(6);
-        System.out.println(L.isEmpty());
-        System.out.println(L.size());
-        L.printDeque();
-        int head = L.removeFirst();
-        System.out.println("head: " + head);
-        int tail = L.removeLast();
-        System.out.println("tail: " + tail);
-        System.out.println("size: " + L.size());
-        L.printDeque();
-        L.resize(20);
-        L.printDeque();
-
-        for (int i = 0; i < 100; i++) {
-            L.addLast(i);
-        }
-        L.printDeque();
-        System.out.println("size: " + L.size());
-
-        for (int i = 0; i < 100; i++) {
-            L.removeLast();
-        }
-        L.printDeque();
-        System.out.println("size: " + L.size());
-    }
+//    public static void main(String[] args) {
+//        ArrayDeque<Integer> L = new ArrayDeque<>();
+//        System.out.println(L.isEmpty());
+//        L.addFirst(4);
+//        L.addFirst(3);
+//        L.addFirst(2);
+//        L.addLast(5);
+//        L.addLast(6);
+//        System.out.println(L.isEmpty());
+//        System.out.println(L.size());
+//        L.printDeque();
+//        int head = L.removeFirst();
+//        System.out.println("head: " + head);
+//        int tail = L.removeLast();
+//        System.out.println("tail: " + tail);
+//        System.out.println("size: " + L.size());
+//        L.printDeque();
+//        L.resize(20);
+//        L.printDeque();
+//        for (int i = 0; i < 100; i++) {
+//            L.addLast(i);
+//        }
+//        L.printDeque();
+//        System.out.println("size: " + L.size());
+//
+//        for (int i = 0; i < 100; i++) {
+//            L.removeLast();
+//        }
+//        L.printDeque();
+//        System.out.println("size: " + L.size());
+//    }
 }
