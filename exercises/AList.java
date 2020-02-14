@@ -7,12 +7,17 @@ public class AList {
     private int size;
     /** Creates an empty list. */
     public AList() {
-        innerArray = new int[101];
+        innerArray = new int[100];
         size = 0;
     }
 
     /** Inserts X into the back of the list. */
     public void addLast(int x) {
+        if (size >= innerArray.length) {
+            int[] tmp = new int[size + 1];
+            System.arraycopy(innerArray, 0, tmp, 0, size);
+            innerArray = tmp;
+        }
         innerArray[size++] = x;
     }
 
@@ -55,6 +60,10 @@ public class AList {
         for (int i = 0; i < 10; i++) {
             System.out.println(L.getLast() + " " + ", size: " + L.size());
             L.removeLast();
+        }
+        for (int i = 0; i < 110; i++) {
+            L.addLast(i);
+            System.out.println(L.size());
         }
     }
 } 
