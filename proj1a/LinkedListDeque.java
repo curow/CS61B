@@ -3,10 +3,12 @@ public class LinkedListDeque<T> {
         T item;
         ListNode prev;
         ListNode next;
+
         ListNode(ListNode prev, ListNode next) {
             this.prev = prev;
             this.next = next;
         }
+
         ListNode(T item, ListNode prev, ListNode next) {
             this.item = item;
             this.prev = prev;
@@ -38,7 +40,7 @@ public class LinkedListDeque<T> {
         prevLast.next = sentinel.prev;
     }
 
-    public  boolean isEmpty() {
+    public boolean isEmpty() {
         return size == 0;
     }
 
@@ -46,7 +48,7 @@ public class LinkedListDeque<T> {
         return size;
     }
 
-    public void  printDeque() {
+    public void printDeque() {
         ListNode p = sentinel.next;
         while (p != sentinel) {
             System.out.print(p.item);
