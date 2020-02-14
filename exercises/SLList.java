@@ -87,6 +87,18 @@ public class SLList {
         }
     }
 
+    public void reverseSolution() {
+        IntNode frontOfReversed = null;
+        IntNode NextNodeToAdd = sentinel.next;
+        while (NextNodeToAdd != null) {
+            IntNode remainderOfOriginal = NextNodeToAdd.next;
+            NextNodeToAdd.next = frontOfReversed;
+            frontOfReversed = NextNodeToAdd;
+            NextNodeToAdd = remainderOfOriginal;
+        }
+        sentinel.next = frontOfReversed;
+    }
+
     private IntNode reverse(IntNode L1, IntNode L2) {
         if (L2 == null) {
             return L1;
@@ -114,20 +126,23 @@ public class SLList {
         L.addFirst(3);
         L.addFirst(5);
         L.addLast(32);
-        System.out.println(L.getFirst());
-        System.out.println(L.size());
+        // System.out.println(L.getFirst());
+        // System.out.println(L.size());
 
-        L.printList();
+        // L.printList();
         L.insert(100, 0);
         L.insert(78, 1);
         L.insert(23, 5);
         L.insert(13, 234);
         L.printList();
 
-        L.reverse();
-        L.printList();
+        // L.reverse();
+        // L.printList();
 
-        L.reverseRecursive();
+        // L.reverseRecursive();
+        // L.printList();
+
+        L.reverseSolution();
         L.printList();
     }
 }
