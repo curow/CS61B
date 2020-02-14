@@ -85,7 +85,7 @@ public class ArrayDeque<T> {
             nextFirst = addThenModuloByLength(nextFirst, 1);
             T item = items[nextFirst];
             items[nextFirst] = null;
-            if (usageRatio() < 0.25) {
+            if (usageRatio() < 0.25 && items.length >= 4) {
                 resize(items.length / 2);
             }
             return item;
@@ -100,7 +100,7 @@ public class ArrayDeque<T> {
             nextLast = addThenModuloByLength(nextLast, -1);
             T item = items[nextLast];
             items[nextLast] = null;
-            if (usageRatio() < 0.25) {
+            if (usageRatio() < 0.25 && items.length >= 4) {
                 resize(items.length / 2);
             }
             return item;
