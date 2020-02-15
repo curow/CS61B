@@ -111,7 +111,7 @@ public class ArrayDeque<T> {
         if (index >= size) {
             return null;
         }
-        index = addThenModuloByLength(nextFirst, 1) + index;
+        index = addThenModuloByLength(nextFirst + 1, index);
         return items[index];
     }
 
@@ -159,6 +159,7 @@ public class ArrayDeque<T> {
         L2.removeFirst();
         L2.addFirst(2);
         L2.addLast(3);
+        L2.get(1);
         L2.addLast(4);
         L2.addFirst(5);
         L2.addLast(6);
