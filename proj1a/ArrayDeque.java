@@ -20,7 +20,7 @@ public class ArrayDeque<T> {
     }
 
     private int addThenModulo(int a, int b, int modulo) {
-        return (a + b) % modulo;
+        return Math.floorMod(a + b, modulo);
     }
 
     private int addThenModuloByLength(int a, int b) {
@@ -115,35 +115,35 @@ public class ArrayDeque<T> {
         return items[index];
     }
 
-    // public static void main(String[] args) {
-    // ArrayDeque<Integer> L = new ArrayDeque<>();
-    // System.out.println(L.isEmpty());
-    // L.addFirst(4);
-    // L.addFirst(3);
-    // L.addFirst(2);
-    // L.addLast(5);
-    // L.addLast(6);
-    // System.out.println(L.isEmpty());
-    // System.out.println(L.size());
-    // L.printDeque();
-    // int head = L.removeFirst();
-    // System.out.println("head: " + head);
-    // int tail = L.removeLast();
-    // System.out.println("tail: " + tail);
-    // System.out.println("size: " + L.size());
-    // L.printDeque();
-    // L.resize(20);
-    // L.printDeque();
-    // for (int i = 0; i < 100; i++) {
-    // L.addLast(i);
-    // }
-    // L.printDeque();
-    // System.out.println("size: " + L.size());
-    //
-    // for (int i = 0; i < 100; i++) {
-    // L.removeLast();
-    // }
-    // L.printDeque();
-    // System.out.println("size: " + L.size());
-    // }
+    private static void main(String[] args) {
+        ArrayDeque<Integer> L = new ArrayDeque<>();
+        System.out.println(L.isEmpty());
+        L.addFirst(4);
+        L.addFirst(3);
+        L.addFirst(2);
+        L.addLast(5);
+        L.addLast(6);
+        System.out.println(L.isEmpty());
+        System.out.println(L.size());
+        L.printDeque();
+        int head = L.removeFirst();
+        System.out.println("head: " + head);
+        int tail = L.removeLast();
+        System.out.println("tail: " + tail);
+        System.out.println("size: " + L.size());
+        L.printDeque();
+        L.resize(20);
+        L.printDeque();
+        for (int i = 0; i < 100; i++) {
+            L.addLast(i);
+        }
+        L.printDeque();
+        System.out.println("size: " + L.size());
+
+        for (int i = 0; i < 100; i++) {
+            L.removeLast();
+        }
+        L.printDeque();
+        System.out.println("size: " + L.size());
+    }
 }
