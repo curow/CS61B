@@ -108,10 +108,10 @@ public class ArrayDeque<T> {
     }
 
     public T get(int index) {
-        index = addThenModuloByLength(nextFirst, 1) + index;
         if (index >= size) {
             return null;
         }
+        index = addThenModuloByLength(nextFirst, 1) + index;
         return items[index];
     }
 
@@ -142,7 +142,7 @@ public class ArrayDeque<T> {
 
 
         System.out.println("get test");
-        for (int i = 0; i< 100; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.print(L.get(i) + " ");
         }
         System.out.println();
@@ -153,5 +153,21 @@ public class ArrayDeque<T> {
         }
         L.printDeque();
         System.out.println("size: " + L.size());
+
+        ArrayDeque<Integer> L2 = new ArrayDeque<>();
+        L2.addFirst(0);
+        L2.removeFirst();
+        L2.addFirst(2);
+        L2.addLast(3);
+        L2.addLast(4);
+        L2.addFirst(5);
+        L2.addLast(6);
+        L2.addLast(7);
+        L2.removeFirst();
+        L2.addFirst(9);
+        L2.removeFirst();
+        L2.removeLast();
+        L2.addFirst(12);
+        L2.get(4);
     }
 }
