@@ -1,5 +1,6 @@
 public class LinkedListDeque<T> {
     private class ListNode {
+        // should be no difference
         T item;
         ListNode prev;
         ListNode next;
@@ -111,3 +112,4 @@ public class LinkedListDeque<T> {
         return getRecursive(sentinel.next, index);
     }
 }
+
