@@ -19,25 +19,19 @@ public class ArrayDeque<T> {
         return size == 0;
     }
 
-    private int addThenModulo(int a, int b, int modulo) {
-        return Math.floorMod(a + b, modulo);
-    }
-
-    private int addThenModuloByLength(int a, int b) {
-        return addThenModulo(a, b, items.length);
+    private int moduloByLength(int index) {
+        return Math.floorMod(index, items.length);
     }
 
     private void resize(int capacity) {
-        T[] a = (T[]) new Object[capacity];
-        int front = addThenModuloByLength(nextFirst, 1);
+        T[] newItems = (T[]) new Object[capacity];
         int newNextFirst = 0;
         int newNextLast = 1;
         for (int i = 0; i < size; i++) {
-            a[newNextLast] = items[front];
-            newNextLast = addThenModulo(newNextLast, 1, capacity);
-            front = addThenModuloByLength(front, 1);
+            newItems[newNextLast] = this.get(i);
+            newNextLast = Math.floorMod(newNextLast + 1, capacity);
         }
-        items = a;
+        items = newItems;
         nextFirst = newNextFirst;
         nextLast = newNextLast;
     }
@@ -48,7 +42,7 @@ public class ArrayDeque<T> {
         }
         size++;
         items[nextFirst] = item;
-        nextFirst = addThenModuloByLength(nextFirst, -1);
+        nextFirst = moduloByLength(nextFirst - 1);
     }
 
     public void addLast(T item) {
@@ -57,15 +51,13 @@ public class ArrayDeque<T> {
         }
         size++;
         items[nextLast] = item;
-        nextLast = addThenModuloByLength(nextLast, 1);
+        nextLast = moduloByLength(nextLast + 1);
     }
 
     public void printDeque() {
-        int first = addThenModuloByLength(nextFirst, 1);
         for (int i = 0; i < size; i++) {
-            int index = addThenModuloByLength(first, i);
-            System.out.print(items[index]);
-            if (index == addThenModuloByLength(nextLast, -1)) {
+            System.out.print(this.get(i));
+            if (i == size - 1) {
                 System.out.println();
             } else {
                 System.out.print(" ");
@@ -77,17 +69,20 @@ public class ArrayDeque<T> {
         return (double) size / items.length;
     }
 
+    private void resizeWhenNecessary() {
+        if (usageRatio() < 0.25 && items.length >= 4) {
+            resize(items.length / 2);
+        }
+    }
+
     public T removeFirst() {
         if (size == 0) {
             return null;
         } else {
             size--;
-            nextFirst = addThenModuloByLength(nextFirst, 1);
+            nextFirst = moduloByLength(nextFirst + 1);
             T item = items[nextFirst];
             items[nextFirst] = null;
-            if (usageRatio() < 0.25 && items.length >= 4) {
-                resize(items.length / 2);
-            }
             return item;
         }
     }
@@ -97,12 +92,10 @@ public class ArrayDeque<T> {
             return null;
         } else {
             size--;
-            nextLast = addThenModuloByLength(nextLast, -1);
+            nextLast = moduloByLength(nextLast - 1);
             T item = items[nextLast];
             items[nextLast] = null;
-            if (usageRatio() < 0.25 && items.length >= 4) {
-                resize(items.length / 2);
-            }
+            resizeWhenNecessary();
             return item;
         }
     }
@@ -111,11 +104,11 @@ public class ArrayDeque<T> {
         if (index >= size) {
             return null;
         }
-        index = addThenModuloByLength(nextFirst + 1, index);
+        index = moduloByLength(nextFirst + 1 + index);
         return items[index];
     }
 
-    private static void main(String[] args) {
+    public static void main(String[] args) {
         ArrayDeque<Integer> L = new ArrayDeque<>();
         System.out.println(L.isEmpty());
         L.addFirst(4);
