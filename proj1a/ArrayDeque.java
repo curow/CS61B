@@ -140,6 +140,14 @@ public class ArrayDeque<T> {
         L.printDeque();
         System.out.println("size: " + L.size());
 
+
+        System.out.println("get test");
+        for (int i = 0; i< 100; i++) {
+            System.out.print(L.get(i) + " ");
+        }
+        System.out.println();
+
+        System.out.println("remove last test");
         for (int i = 0; i < 100; i++) {
             L.removeLast();
         }
