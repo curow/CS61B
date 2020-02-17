@@ -1,6 +1,5 @@
 public class LinkedListDeque<T> implements Deque<T>{
     private class ListNode {
-        // should be no difference
         T item;
         ListNode prev;
         ListNode next;
