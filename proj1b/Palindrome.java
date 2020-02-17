@@ -8,18 +8,23 @@ public class Palindrome {
         return res;
     }
 
-    private boolean isPalindrome(Deque<Character> word) {
+    private boolean isPalindrome(Deque<Character> word,
+                                 CharacterComparator cc) {
         if (word.isEmpty() || word.size() == 1) {
             return true;
         } else {
             char first = word.removeFirst();
             char last = word.removeLast();
-            return first == last && isPalindrome(word);
+            return cc.equalChars(first, last) && isPalindrome(word, cc);
         }
     }
 
-    public boolean isPalindrome(String word) {
+    public boolean isPalindrome(String word, CharacterComparator cc) {
         Deque<Character> wordDeque = wordToDeque(word);
-        return isPalindrome(wordDeque);
+        return isPalindrome(wordDeque, cc);
+    }
+
+    public boolean isPalindrome(String word) {
+        return isPalindrome(word, (x, y) -> (x == y));
     }
 }
