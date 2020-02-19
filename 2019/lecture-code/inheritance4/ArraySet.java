@@ -1,5 +1,6 @@
 import java.util.Iterator;
 
+@SuppressWarnings (value="unchecked")
 public class ArraySet<T> implements Iterable<T> {
     private T[] items;
     private int size; // the next item to be added will be at position size
