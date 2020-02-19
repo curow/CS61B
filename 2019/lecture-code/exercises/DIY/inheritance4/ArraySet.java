@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 public class ArraySet<T> implements Iterable<T> {
@@ -10,6 +11,20 @@ public class ArraySet<T> implements Iterable<T> {
     public ArraySet() {
         size = 0;
         items = (T[]) new Object[100];
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArraySet<T> arraySet = (ArraySet<T>) o;
+        for (int i = 0; i < arraySet.size; i++) {
+            if (!contains(arraySet.items[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -72,7 +87,6 @@ public class ArraySet<T> implements Iterable<T> {
 
     public static void main(String[] args) {
         ArraySet<String> s = new ArraySet<>();
-//        s.add(null);
         s.add("horse");
         s.add("fish");
         s.add("house");
@@ -85,6 +99,13 @@ public class ArraySet<T> implements Iterable<T> {
         }
 
         System.out.println(s);
+
+        ArraySet<String> s2 = new ArraySet<>();
+        s2.add("fish");
+        s2.add("horse");
+        s2.add("house");
+        // s2.add("cat");
+        System.out.println(s.equals(s2));
     }
 
     /* Also to do:
