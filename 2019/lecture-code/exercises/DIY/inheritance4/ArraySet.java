@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class ArraySet<T> implements Iterable<T> {
     private int size;
@@ -27,17 +24,31 @@ public class ArraySet<T> implements Iterable<T> {
         return true;
     }
 
+    // @Override
+    // public String toString() {
+    //     StringBuilder itemString = new StringBuilder();
+    //     for (int i = 0; i < size - 1; i++) {
+    //         itemString.append(items[i].toString());
+    //         itemString.append(", ");
+    //     }
+    //     itemString.append(items[size - 1].toString());
+    //     return "ArraySet{" +
+    //             "size=" + size +
+    //             ", items=" + itemString +
+    //             '}';
+    // }
+
+
     @Override
     public String toString() {
-        StringBuilder itemString = new StringBuilder();
-        for (int i = 0; i < size - 1; i++) {
-            itemString.append(items[i].toString());
-            itemString.append(", ");
+        List<String> listOfItems = new ArrayList<>();
+        for (T x : this) {
+            listOfItems.add(x.toString());
         }
-        itemString.append(items[size - 1].toString());
+        String stringOfItems = String.join(", ", listOfItems);
         return "ArraySet{" +
                 "size=" + size +
-                ", items=" + itemString +
+                ", items=" + stringOfItems +
                 '}';
     }
 
