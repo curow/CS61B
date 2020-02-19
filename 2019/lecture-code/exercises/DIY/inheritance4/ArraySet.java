@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -12,11 +13,25 @@ public class ArraySet<T> implements Iterable<T> {
     }
 
     @Override
+    public String toString() {
+        StringBuilder itemString = new StringBuilder();
+        for (int i = 0; i < size - 1; i++) {
+            itemString.append(items[i].toString());
+            itemString.append(", ");
+        }
+        itemString.append(items[size - 1].toString());
+        return "ArraySet{" +
+                "size=" + size +
+                ", items=" + itemString +
+                '}';
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return new SetIterator();
     }
 
-    class SetIterator implements Iterator<T> {
+    private class SetIterator implements Iterator<T> {
         private int p;
 
         public SetIterator() {
@@ -68,6 +83,8 @@ public class ArraySet<T> implements Iterable<T> {
         for (String str : s) {
             System.out.println(str);
         }
+
+        System.out.println(s);
     }
 
     /* Also to do:
