@@ -52,6 +52,14 @@ public class ArraySet<T> implements Iterable<T> {
                 '}';
     }
 
+    public static <T> ArraySet<T> of(T... args) {
+        ArraySet<T> result = new ArraySet<>();
+        for (T x : args) {
+            result.add(x);
+        }
+        return result;
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new SetIterator();
@@ -117,6 +125,9 @@ public class ArraySet<T> implements Iterable<T> {
         s2.add("house");
         // s2.add("cat");
         System.out.println(s.equals(s2));
+
+        ArraySet<Integer> s3 = ArraySet.of(1, 2, 3, 4);
+        System.out.println(s3);
     }
 
     /* Also to do:
