@@ -13,18 +13,18 @@ public class HugLife {
      * Size of the world. Probably best to keep this under 100
      * or so.
      */
-    public static final int WORLD_SIZE = 15;
+    public static final int WORLD_SIZE = 50;
 
     /**
      * Maximum number of cycles to simulate by default.
      */
-    public static final int MAX_CYCLES = 1000;
+    public static final int MAX_CYCLES = 10000;
 
     /**
      * Time in milliseconds between simulation steps.
      * Reduce to make things run faster.
      */
-    public static final int PAUSE_TIME_PER_SIMSTEP = 100;
+    public static final int PAUSE_TIME_PER_SIMSTEP = 20;
 
     /**
      * If true, the HugLifeAnimator class saves an image after every cycle.

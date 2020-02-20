@@ -6,6 +6,7 @@ import huglife.Action;
 import huglife.Occupant;
 
 import java.awt.Color;
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -20,24 +21,33 @@ import static huglife.HugLifeUtils.randomEntry;
  */
 public class Clorus extends Creature {
 
+    private int age;
+    private int replicateUpperAge;
+    private int activeAge;
+    private double ageFactor;
+
     /**
      * red color.
      */
-    private final int r = 34;
+    private int r;
     /**
      * green color.
      */
-    private final int g = 0;
+    private int g = 0;
     /**
      * blue color.
      */
-    private final int b = 231;
+    private int b;
 
     /**
      * creates plip with energy equal to E.
      */
     public Clorus(double e) {
         super("clorus");
+        age = 0;
+        replicateUpperAge = 600;
+        activeAge = replicateUpperAge;
+        ageFactor = 0.02;
         energy = e;
     }
 
@@ -50,6 +60,8 @@ public class Clorus extends Creature {
 
 
     public Color color() {
+        r = (int) Math.min(255, age / 10);
+        b = (int) Math.min(255, energy / age);
         return color(r, g, b);
     }
 
@@ -57,7 +69,7 @@ public class Clorus extends Creature {
      * cloruses attack other creatures and gain their energy
      */
     public void attack(Creature c) {
-        energy += c.energy();
+        energy += c.energy() / (1 + ageFactor * age);
     }
 
     private static final double moveEnergyLoss = 0.03;
@@ -67,7 +79,7 @@ public class Clorus extends Creature {
      * Cloruses should lose 0.03 units of energy when moving.
      */
     public void move() {
-        energy -= moveEnergyLoss;
+        energy -= moveEnergyLoss * (1 + ageFactor * age);
     }
 
 
@@ -75,7 +87,7 @@ public class Clorus extends Creature {
      * Cloruses should loss 0.01 energy when staying.
      */
     public void stay() {
-        energy -= stayEnergyLoss;
+        energy -= stayEnergyLoss * (1 + ageFactor * age);
     }
 
     /**
@@ -84,43 +96,51 @@ public class Clorus extends Creature {
      * Plip.
      */
     public Clorus replicate() {
-        Clorus babyClorus = new Clorus(energy / 2);
-        energy -= energy / 2;
+        double ageLoss =  Math.min((double) age / replicateUpperAge, 0.8);
+        Clorus babyClorus = new Clorus(energy / (2 + 2 * ageLoss));
+        energy -= babyClorus.energy;
+        energy *= 1 - ageLoss;
         return babyClorus;
     }
 
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
-        // Rule 1
-        Deque<Direction> emptyNeighbors = new ArrayDeque<>();
+        age += 1;
+        Deque<Direction> placesToWander = new ArrayDeque<>();
         Deque<Direction> neighborPlip = new ArrayDeque<>();
-        // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
         for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet()) {
             Direction direction = entry.getKey();
             Occupant occupant = entry.getValue();
             if (occupant.name().equals("plip")) {
                 neighborPlip.add(direction);
             } else if (occupant.name().equals("empty")) {
-                emptyNeighbors.add(direction);
+                placesToWander.add(direction);
             }
         }
 
-        // Rule 1
-        if (emptyNeighbors.isEmpty()) {
-            return new Action(Action.ActionType.STAY);
-        }
-        // Rule 2
-        else if (!neighborPlip.isEmpty()) {
+        // modified the rule to make Clorus less aggressive
+        double hungryEnergyThreshold = 5;
+        double replicateEnergyThreshold = 15;
+        // eat for survive.
+        if (!neighborPlip.isEmpty()
+                && energy < hungryEnergyThreshold) {
             return new Action(Action.ActionType.ATTACK,
                     randomEntry(neighborPlip));
         }
-        // Rule 3
-        else if (energy >= 1) {
-            return new Action(Action.ActionType.REPLICATE,
-                    randomEntry(emptyNeighbors));
+        else if (placesToWander.isEmpty()) {
+            // eat to be able to wander around if not full.
+            if (!neighborPlip.isEmpty() && age < activeAge) {
+                return new Action(Action.ActionType.ATTACK,
+                        randomEntry(neighborPlip));
+            } else { // no place to go.
+                return new Action(Action.ActionType.STAY);
+            }
         }
-        // Rule 4
+        else if (energy >= replicateEnergyThreshold
+                    && age < replicateUpperAge) {
+            return new Action(Action.ActionType.REPLICATE,
+                    randomEntry(placesToWander));
+        }
         return new Action(Action.ActionType.MOVE,
-                randomEntry(emptyNeighbors));
+                randomEntry(placesToWander));
     }
 }
