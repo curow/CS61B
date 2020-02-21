@@ -36,4 +36,30 @@ public class TestArrayRingBuffer {
         assertTrue(arb.isEmpty());
         assertEquals(23, output);
     }
+
+    @Test
+    public void iteratorTest() {
+        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer<>(10);
+        for (int i = 0; i < arb.capacity(); i++) {
+            arb.enqueue(i);
+        }
+        for (int i : arb) {
+            System.out.println(i);
+        }
+    }
+
+    @Test
+    public void equalTest() {
+        ArrayRingBuffer<Integer> arb1 = new ArrayRingBuffer<>(10);
+        for (int i = 0; i < arb1.capacity(); i++) {
+            arb1.enqueue(i);
+        }
+
+        ArrayRingBuffer<Integer> arb2 = new ArrayRingBuffer<>(10);
+        for (int i = 0; i < arb2.capacity(); i++) {
+            arb2.enqueue(i);
+        }
+
+        assertEquals(arb1, arb2);
+    }
 }

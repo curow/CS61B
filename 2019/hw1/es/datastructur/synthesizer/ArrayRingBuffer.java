@@ -1,5 +1,7 @@
 package es.datastructur.synthesizer;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     /* Index for the next dequeue or peek. */
@@ -80,7 +82,49 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         return rb[first];
     }
 
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArrayRingBuffer<?> that = (ArrayRingBuffer<?>) o;
+        return first == that.first &&
+                last == that.last &&
+                fillCount == that.fillCount &&
+                Arrays.equals(rb, that.rb);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(first, last, fillCount);
+        result = 31 * result + Arrays.hashCode(rb);
+        return result;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new BufferIterator();
+    }
+
+    private class BufferIterator implements Iterator<T> {
+        private int index;
+        private int count;
+
+        public BufferIterator() {
+            index = first;
+            count = fillCount;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return count > 0;
+        }
+
+        @Override
+        public T next() {
+            T result = rb[index];
+            index = wraparound(index + 1);
+            count--;
+            return result;
+        }
+    }
 }
-    // TODO: Remove all comments that say TODO when you're done.
