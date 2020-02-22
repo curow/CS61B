@@ -9,10 +9,6 @@ class Solution {
             }
         }
 
-        public boolean connected(int a, int b) {
-            return find(a) == find(b);
-        }
-
         public int find(int index) {
             int parent = array[index];
             if (parent < 0) {
@@ -50,32 +46,26 @@ class Solution {
     private int rows;
     private int cols;
     private int head;
+    private UnionFind uf;
 
     private int getIndex(int i, int j) {
         return i * cols + j;
     }
 
-    private void unionAdjacent(UnionFind uf, int[][] grid, int i, int j) {
+    private void unionAdjacent(int[][] grid, int i, int j) {
         int center = getIndex(i, j);
         // connect to head if at top row
         if (i == 0) {
             uf.union(center, head);
         }
-        // top
-        if (i - 1 >= 0 && grid[i - 1][j] == 1) {
-            uf.union(center, center - cols);
-        }
-        // down
-        if (i + 1 < rows && grid[i + 1][j] == 1) {
-            uf.union(center, center + cols);
-        }
-        // left
-        if (j - 1 >= 0 && grid[i][j - 1] == 1) {
-            uf.union(center, center - 1);
-        }
-        // right
-        if (j + 1 < cols && grid[i][j + 1] == 1) {
-            uf.union(center, center + 1);
+        int[][] directions = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+        for (int[] dir : directions) {
+            int ni = i + dir[0];
+            int nj = j + dir[1];
+            if (ni >= 0 && ni < rows && nj >= 0 && nj < cols
+                && grid[ni][nj] == 1) {
+                uf.union(center, getIndex(ni, nj));
+            }
         }
     }
 
@@ -84,14 +74,14 @@ class Solution {
         cols = grid[0].length;
         head = rows * cols;
         // one extra space to store head.
-        UnionFind uf = new UnionFind(rows * cols + 1);
+        uf = new UnionFind(rows * cols + 1);
         // mark all places that are hit.
         for (int[] hit : hits) {
             int i = hit[0];
             int j = hit[1];
             grid[i][j] -= 1;
         }
-        // union top bricks to same set
+        // union top bricks to head
         for (int j = 0; j < cols; j++) {
             if (grid[0][j] == 1) {
                 uf.union(head, getIndex(0, j));
@@ -101,7 +91,7 @@ class Solution {
         for (int i = 1; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == 1) {
-                    unionAdjacent(uf, grid, i, j);
+                    unionAdjacent(grid, i, j);
                 }
             }
         }
@@ -116,7 +106,7 @@ class Solution {
             if (grid[i][j] == 0) {
                 numOfFallingBricks[k] = 0;
             } else {
-                unionAdjacent(uf, grid, i, j);
+                unionAdjacent(grid, i, j);
                 int newCount = uf.sizeOf(head);
                 // remove the hit brick if not-falling bricks increases
                 numOfFallingBricks[k] = Math.max(newCount - oldCount - 1, 0);
