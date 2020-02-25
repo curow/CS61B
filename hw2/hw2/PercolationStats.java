@@ -1,10 +1,11 @@
 package hw2;
 
 import static edu.princeton.cs.introcs.StdRandom.uniform;
+import static edu.princeton.cs.introcs.StdRandom.setSeed;
 
 public class PercolationStats {
 
-    private int[] recorder;
+    private double[] recorder;
     private int T;
 
     // perform T independent experiments on an N-by-N grid
@@ -14,17 +15,20 @@ public class PercolationStats {
             throw new IllegalArgumentException(
                     "N or T should not less than or equal to zero");
         }
-        recorder = new int[T];
+        recorder = new double[T];
         for (int i = 0; i < T; i++) {
+            setSeed(i);
             Percolation p = pf.make(N);
             int count = 0;
             while (!p.percolates()) {
                 int row = uniform(N);
                 int col = uniform(N);
-                p.open(row, col);
-                count++;
+                if (!p.isOpen(row, col)) {
+                    p.open(row, col);
+                    count++;
+                }
             }
-            recorder[i] = count;
+            recorder[i] = ((double) count) / (N * N);
         }
     }
 
