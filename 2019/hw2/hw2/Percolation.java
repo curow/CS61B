@@ -6,9 +6,10 @@ public class Percolation {
     private int[][] grid;
     private WeightedQuickUnionUF uf;
     private int top;
-    private int bottom;
+    // private int bottom;
     private int N;
     private int numOfOpenSites;
+    // private boolean percolates;
 
     private int getIndex(int i, int j) {
         return i * N + j;
@@ -16,6 +17,7 @@ public class Percolation {
 
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
+        // percolates = false;
         if (N <= 0) {
             throw new java.lang.IllegalArgumentException("N can't be less "
                     + "than zero!");
@@ -34,7 +36,7 @@ public class Percolation {
         // index in uf to store top grid head.
         top = numOfSites;
         // index in uf to store bottom grid head.
-        bottom = numOfSites + 1;
+        // bottom = numOfSites + 1;
     }
 
     private void  validate(int row, int col) {
@@ -53,9 +55,9 @@ public class Percolation {
             if (row == 0) {
                 uf.union(top, center);
             }
-            if (row == N - 1) {
-                uf.union(bottom, center);
-            }
+            // if (row == N - 1) {
+            //     uf.union(bottom, center);
+            // }
             int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
             for (int[] direction : directions) {
                 int i = row + direction[0];
@@ -88,7 +90,12 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return uf.connected(top, bottom);
+        for (int j = 0; j < N; j++) {
+            if (uf.connected(top, getIndex(N - 1, j))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // use for unit testing
