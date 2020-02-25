@@ -17,16 +17,16 @@ public class Percolation {
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
         if (N <= 0) {
-            throw new java.lang.IllegalArgumentException("N can't be less " +
-                    "than zero!");
+            throw new java.lang.IllegalArgumentException("N can't be less "
+                    + "than zero!");
         }
         this.N = N;
         numOfOpenSites = 0;
         grid = new int[N][N];
         for (int i = 0; i < N; i++) {
-           for (int j = 0; j < N; j++) {
-               grid[i][j] = 0;
-           }
+            for (int j = 0; j < N; j++) {
+                grid[i][j] = 0;
+            }
         }
         int numOfSites = N * N;
         // two more to store top and bottom head.
@@ -52,7 +52,8 @@ public class Percolation {
             int center = getIndex(row, col);
             if (row == 0) {
                 uf.union(top, center);
-            } else if (row == N - 1) {
+            }
+            if (row == N - 1) {
                 uf.union(bottom, center);
             }
             int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
