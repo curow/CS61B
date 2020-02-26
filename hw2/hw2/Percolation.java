@@ -34,10 +34,6 @@ public class Percolation {
         uf = new WeightedQuickUnionUF(numOfSites + 1);
         connectedToBottom = new boolean[numOfSites + 1];
         top = numOfSites;
-        for (int j = 0; j < N; j++) {
-            connectedToBottom[getIndex(N - 1, j)] = true;
-            unionWithCheckBottom(top, getIndex(0, j));
-        }
     }
 
     private void  validate(int row, int col) {
@@ -61,6 +57,14 @@ public class Percolation {
             grid[row][col] = true;
             numOfOpenSites++;
             int center = getIndex(row, col);
+            // first check if node is connected to bottom.
+            if (row == N - 1) {
+                connectedToBottom[center] = true;
+            }
+            // union components while keeping the connected to bottom info.
+            if (row == 0) {
+                unionWithCheckBottom(top, center);
+            }
             int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
             for (int[] direction : directions) {
                 int i = row + direction[0];

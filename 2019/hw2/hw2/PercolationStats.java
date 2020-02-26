@@ -1,7 +1,6 @@
 package hw2;
 
 import static edu.princeton.cs.introcs.StdRandom.uniform;
-import static edu.princeton.cs.introcs.StdRandom.setSeed;
 
 public class PercolationStats {
 
@@ -17,7 +16,6 @@ public class PercolationStats {
         }
         recorder = new double[T];
         for (int i = 0; i < T; i++) {
-            setSeed(i);
             Percolation p = pf.make(N);
             int count = 0;
             while (!p.percolates()) {
