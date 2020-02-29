@@ -1,0 +1,20 @@
+InsertRandomSpeedTest Results:
+string length: 5
+    # of strings to insert into: 100
+        class ULLMap: 0.01 sec
+        class BSTMap: 0.00 sec
+        Java's Built-in TreeMap: 0.00 sec
+    # of strings to insert into: 1000
+        class ULLMap: 0.02 sec
+        class BSTMap: 0.01 sec
+        Java's Built-in TreeMap: 0.00 sec
+    # of strings to insert into: 10000
+        class ULLMap: 0.36 sec
+        class BSTMap: 0.01 sec
+        Java's Built-in TreeMap: 0.01 sec
+    # of strings to insert into: 100000
+        class ULLMap: Stack Overflow
+        class BSTMap: 0.13 sec
+        Java's Built-in TreeMap: 0.12 sec
+
+Inset Results:
