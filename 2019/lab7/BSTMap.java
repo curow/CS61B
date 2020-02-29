@@ -1,3 +1,4 @@
+import java.security.Key;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -99,9 +100,41 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 "supported");
     }
 
+    private class KeyIterator implements Iterator<K> {
+        private K[] keys;
+        private int current;
+
+        private int insertInOrder(Node p, int start) {
+            if (p == null) {
+                return start;
+            } else {
+                start = insertInOrder(p.left, start);
+                keys[start] = p.key;
+                return insertInOrder(p.right, start + 1);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        public KeyIterator(Node root) {
+            keys = (K[]) new Comparable[size];
+            insertInOrder(root, 0);
+            current = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current < keys.length;
+        }
+
+        @Override
+        public K next() {
+            return keys[current++];
+        }
+    }
+
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException("iterator is not supported");
+        return new KeyIterator(root);
     }
 
     @Override

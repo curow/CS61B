@@ -7,6 +7,24 @@ import org.junit.Test;
 public class TestBSTMapExtra {
 
     /*
+    * Sanity test for iterator
+    */
+    @Test
+    public void sanityIteratorTest() {
+        BSTMap<Character, Integer> b = new BSTMap<>();
+        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        for (int i = 0; i < 26; i++) {
+            b.put(alphabet[i], 1);
+        }
+        assertEquals(26, b.size()); //keys are there
+        int i = 0;
+        for (Character ch : b) {
+            System.out.println(ch);
+            assertEquals(alphabet[i++], (char) ch);
+        }
+    }
+
+    /*
     * Sanity test for keySet, only here because it's optional
     */
     @Test
