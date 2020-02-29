@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.security.Key;
 import java.util.Iterator;
 import java.util.Set;
@@ -89,15 +90,55 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         printInOrder(root);
     }
 
+    private Node remove(Node p, K key) {
+        if (p == null) {
+            return null;
+        }
+        int cmp = key.compareTo(p.key);
+        if (cmp < 0) {
+            p.left = remove(p.left, key);
+        } else if (cmp > 0) {
+            p.right = remove(p.right, key);
+        } else {
+            size--;
+            if (p.left == null || p.right == null) {
+                p = p.left == null ? p.right : p.left;
+            } else {
+                Node rightestNodeInLeft = p.left;
+                Node parent = p;
+                while (rightestNodeInLeft.right != null) {
+                    parent = rightestNodeInLeft;
+                    rightestNodeInLeft = rightestNodeInLeft.right;
+                }
+                K pKey = p.key;
+                V pValue = p.value;
+                p.key = rightestNodeInLeft.key;
+                p.value = rightestNodeInLeft.value;
+                rightestNodeInLeft.key = pKey;
+                rightestNodeInLeft.value = pValue;
+                p.left = remove(p.left, key);
+            }
+        }
+        return p;
+    }
+
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException("remove(key) is not supported");
+        V value = get(key);
+        if (value != null) {
+            root = remove(root, key);
+        }
+        return value;
     }
 
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException("remove(key, value) is not " +
-                "supported");
+        V realValue = get(key);
+        if (realValue == value) {
+            root = remove(root, key);
+            return value;
+        }
+        return null;
     }
 
     private class KeyIterator implements Iterator<K> {
