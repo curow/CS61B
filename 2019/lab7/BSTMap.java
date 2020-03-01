@@ -90,6 +90,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         printInOrder(root);
     }
 
+    private void swap(Node p, Node q) {
+        K key = p.key;
+        V value = p.value;
+        p.key = q.key;
+        p.value = q.value;
+        q.key = key;
+        q.value = value;
+    }
+
     private Node remove(Node p, K key) {
         if (p == null) {
             return null;
@@ -105,17 +114,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 p = p.left == null ? p.right : p.left;
             } else {
                 Node rightestNodeInLeft = p.left;
-                Node parent = p;
                 while (rightestNodeInLeft.right != null) {
-                    parent = rightestNodeInLeft;
                     rightestNodeInLeft = rightestNodeInLeft.right;
                 }
-                K pKey = p.key;
-                V pValue = p.value;
-                p.key = rightestNodeInLeft.key;
-                p.value = rightestNodeInLeft.value;
-                rightestNodeInLeft.key = pKey;
-                rightestNodeInLeft.value = pValue;
+                swap(p, rightestNodeInLeft);
                 p.left = remove(p.left, key);
             }
         }
