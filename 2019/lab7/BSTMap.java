@@ -180,8 +180,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return new KeyIterator(root);
     }
 
+    private int addKeys(Node p, K[] keys, int start) {
+        if (p != null) {
+            keys[start++] = p.key;
+            start = addKeys(p.left, keys, start);
+            start = addKeys(p.right, keys, start);
+        }
+        return start;
+    }
+
     @Override
+    @SuppressWarnings("unchecked")
     public Set<K> keySet() {
-        throw new UnsupportedOperationException("keySet is not supported");
+        K[] keys = (K[]) new Comparable[size];
+        addKeys(root, keys, 0);
+        return Set.of(keys);
     }
 }
