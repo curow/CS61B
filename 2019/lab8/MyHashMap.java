@@ -140,6 +140,8 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
                 if (node.key == key) {
                     value = node.value;
                     bucket.remove(node);
+                    keys.remove(key);
+                    size--;
                 }
             }
             return value;
@@ -148,16 +150,19 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 
     @Override
     public V remove(K key, V value) {
-        if (!containsKey(key)) {
-            return null;
-        } else {
+        if (containsKey(key)) {
             int index = getIndex(key);
             LinkedList<Node> bucket = buckets[index];
             boolean removed = bucket.removeIf(
                                 node -> node.key == key
                                 && node.value == value);
-            return removed ? value : null;
+            if (removed) {
+                size--;
+                keys.remove(key);
+                return value;
+            }
         }
+        return null;
     }
 
     @Override
