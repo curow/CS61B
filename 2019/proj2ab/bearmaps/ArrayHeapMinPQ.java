@@ -70,7 +70,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             throw new IllegalArgumentException("item already in PQ");
         }
         add(node);
-        swim(size);
     }
 
     @Override
@@ -119,10 +118,11 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
 
     private void add(PriorityNode node) {
-        ++size;
         assert node != null;
+        ++size;
         heap.add(node);
         location.put(node.getItem(), size);
+        swim(size);
     }
 
     private T remove() {
@@ -148,42 +148,33 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         set(nodeB, a);
     }
 
+    private boolean greater(int a, int b) {
+        assert a >= 1 && a <= size && b >= 1 && b <= size;
+        PriorityNode nodeA = heap.get(a);
+        PriorityNode nodeB = heap.get(b);
+        return nodeA.compareTo(nodeB) > 0;
+    }
+
     private void swim(int index) {
-        if (index > 1) {
-            PriorityNode child = heap.get(index);
-            PriorityNode parent = heap.get(index / 2);
-            if (child.compareTo(parent) < 0) {
-                exchange(index, index / 2);
-                swim(index / 2);
-            }
+        int parentIndex = index / 2;
+        if (index > 1 && greater(parentIndex, index)) {
+                exchange(index, parentIndex);
+                swim(parentIndex);
         }
     }
 
+    /**
+     * @source https://algs4.cs.princeton.edu/24pq/MinPQ.java.html
+     */
     private void sink(int index) {
-        if (index < size) {
-            int leftIndex = 2 * index;
-            int rightIndex = 2 * index + 1;
-            PriorityNode parent = heap.get(index);
-            PriorityNode leftChild = leftIndex <= size ?
-                    heap.get(leftIndex) : null;
-            PriorityNode rightChild = rightIndex <= size ?
-                    heap.get(rightIndex) : null;
-            if (leftChild != null && rightChild != null
-                && (parent.compareTo(leftChild) > 0
-                    || parent.compareTo(rightChild) > 0)) {
-                    if (leftChild.compareTo(rightChild) < 0) {
-                        exchange(index, leftIndex);
-                        sink(leftIndex);
-                    } else {
-                        exchange(index, rightIndex);
-                        sink(rightIndex);
-                    }
-            } else if (leftChild != null && parent.compareTo(leftChild) > 0) {
-                exchange(index, leftIndex);
-                sink(leftIndex);
-            } else if (rightChild != null && parent.compareTo(rightChild) > 0) {
-                exchange(index, rightIndex);
-                sink(rightIndex);
+        int childIndex = 2 * index;
+        if (childIndex <= size) {
+            if (childIndex < size && greater(childIndex, childIndex + 1)) {
+                ++childIndex;
+            }
+            if (greater(index, childIndex)) {
+                exchange(index, childIndex);
+                sink(childIndex);
             }
         }
     }

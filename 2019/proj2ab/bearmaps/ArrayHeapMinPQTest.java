@@ -1,8 +1,8 @@
 package bearmaps;
 
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 
 public class ArrayHeapMinPQTest {
     @Test
@@ -39,6 +39,21 @@ public class ArrayHeapMinPQTest {
             pq.add(i, i);
         }
         for (int i = 1; i <= N; i++) {
+            assertFalse(pq.contains(i - 1));
+            assertEquals(i, (int) pq.removeSmallest());
+        }
+    }
+
+    @Test
+    public void changPriorityTest() {
+        ArrayHeapMinPQ<Integer> pq = new ArrayHeapMinPQ<>();
+        int N = 20;
+        for (int i = 1; i <= N; i++) {
+            pq.add(i, i);
+        }
+        pq.changePriority(N, 0);
+        assertEquals(N, (int) pq.removeSmallest());
+        for (int i = 1; i < N; i++) {
             assertEquals(i, (int) pq.removeSmallest());
         }
     }
