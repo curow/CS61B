@@ -59,6 +59,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     public ArrayHeapMinPQ() {
         size = 0;
         heap = new ArrayList<>();
+        heap.add(0, null);
         location = new HashMap<>();
     }
 
@@ -68,8 +69,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (contains(item)) {
             throw new IllegalArgumentException("item already in PQ");
         }
-        ++size;
-        update(node, size);
+        add(node);
         swim(size);
     }
 
@@ -92,11 +92,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             throw new NoSuchElementException("PQ is empty");
         }
         exchange(1, size);
-        PriorityNode node = heap.get(size);
-        T item = node.getItem();
-        heap.set(size, null);
-        location.remove(item);
-        --size;
+        T item = remove();
         sink(1);
         return item;
     }
@@ -122,7 +118,23 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
     }
 
-    private void update(PriorityNode node, int index) {
+    private void add(PriorityNode node) {
+        ++size;
+        assert node != null;
+        heap.add(node);
+        location.put(node.getItem(), size);
+    }
+
+    private T remove() {
+        PriorityNode node = heap.get(size);
+        T item = node.getItem();
+        heap.remove(size);
+        location.remove(item);
+        --size;
+        return item;
+    }
+
+    private void set(PriorityNode node, int index) {
         assert node != null && index >= 1 && index <= size;
         heap.set(index, node);
         location.put(node.getItem(), index);
@@ -132,8 +144,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         assert a >= 1 && a <= size && b >= 1 && b <= size;
         PriorityNode nodeA = heap.get(a);
         PriorityNode nodeB = heap.get(b);
-        update(nodeA, b);
-        update(nodeB, a);
+        set(nodeA, b);
+        set(nodeB, a);
     }
 
     private void swim(int index) {
@@ -149,15 +161,29 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     private void sink(int index) {
         if (index < size) {
+            int leftIndex = 2 * index;
+            int rightIndex = 2 * index + 1;
             PriorityNode parent = heap.get(index);
-            PriorityNode leftChild = heap.get(2 * index);
-            PriorityNode rightChild = heap.get(2 * index + 1);
-            if (parent.compareTo(leftChild) > 0) {
-                exchange(index, 2 * index);
-                sink(2 * index);
-            } else if (parent.compareTo(rightChild) > 0) {
-                exchange(index, 2 * index + 1);
-                sink(2 * index);
+            PriorityNode leftChild = leftIndex <= size ?
+                    heap.get(leftIndex) : null;
+            PriorityNode rightChild = rightIndex <= size ?
+                    heap.get(rightIndex) : null;
+            if (leftChild != null && rightChild != null
+                && (parent.compareTo(leftChild) > 0
+                    || parent.compareTo(rightChild) > 0)) {
+                    if (leftChild.compareTo(rightChild) < 0) {
+                        exchange(index, leftIndex);
+                        sink(leftIndex);
+                    } else {
+                        exchange(index, rightIndex);
+                        sink(rightIndex);
+                    }
+            } else if (leftChild != null && parent.compareTo(leftChild) > 0) {
+                exchange(index, leftIndex);
+                sink(leftIndex);
+            } else if (rightChild != null && parent.compareTo(rightChild) > 0) {
+                exchange(index, rightIndex);
+                sink(rightIndex);
             }
         }
     }
