@@ -200,4 +200,72 @@ public class ArrayHeapMinPQTest {
         System.out.println("ArrayHeapMinPQ Total time elapsed: "
                 + sw.elapsedTime() + " seconds.");
     }
+
+    @Test
+    public void getAndRemoveSmallestTimingTest() {
+        Random randomNumberGenerator = new Random(0);
+        ArrayHeapMinPQ<Integer> arrayHeapMinPQ = new ArrayHeapMinPQ<>();
+        NaiveMinPQ<Integer> naiveMinPQ = new NaiveMinPQ<>();
+        int N = 10000;
+        for (int i = 0; i < N; i += 1) {
+            int item = randomNumberGenerator.nextInt();
+            double priority = randomNumberGenerator.nextDouble();
+            naiveMinPQ.add(item, priority);
+            arrayHeapMinPQ.add(item, priority);
+        }
+
+        Stopwatch sw = new Stopwatch();
+        for (int i = 0; i < N; i++) {
+            naiveMinPQ.getSmallest();
+            naiveMinPQ.removeSmallest();
+        }
+        System.out.println("NaiveMinPQ Total time elapsed: "
+                + sw.elapsedTime() + " seconds.");
+
+        sw = new Stopwatch();
+        for (int i = 0; i < N; i += 1) {
+            arrayHeapMinPQ.getSmallest();
+            arrayHeapMinPQ.removeSmallest();
+        }
+        System.out.println("ArrayHeapMinPQ Total time elapsed: "
+                + sw.elapsedTime() + " seconds.");
+    }
+
+    @Test
+    public void changePriorityTimingTest() {
+        Random randomNumberGenerator = new Random(0);
+        ArrayHeapMinPQ<Integer> arrayHeapMinPQ = new ArrayHeapMinPQ<>();
+        NaiveMinPQ<Integer> naiveMinPQ = new NaiveMinPQ<>();
+        int N = 10000;
+        ArrayList<Integer> allItems = new ArrayList<>();
+        for (int i = 0; i < N; i += 1) {
+            int item = randomNumberGenerator.nextInt();
+            double priority = randomNumberGenerator.nextDouble();
+            naiveMinPQ.add(item, priority);
+            arrayHeapMinPQ.add(item, priority);
+            allItems.add(item);
+        }
+
+        Random randomNumberGeneratorA = new Random(0);
+        Stopwatch sw = new Stopwatch();
+        for (int i = 0; i < N; i++) {
+            int index = randomNumberGeneratorA.nextInt(allItems.size());
+            int item = allItems.get(index);
+            double priority = randomNumberGeneratorA.nextDouble();
+            naiveMinPQ.changePriority(item, priority);
+        }
+        System.out.println("NaiveMinPQ Total time elapsed: "
+                + sw.elapsedTime() + " seconds.");
+
+        Random randomNumberGeneratorB = new Random(0);
+        sw = new Stopwatch();
+        for (int i = 0; i < N; i += 1) {
+            int index = randomNumberGeneratorB.nextInt(allItems.size());
+            int item = allItems.get(index);
+            double priority = randomNumberGeneratorB.nextDouble();
+            arrayHeapMinPQ.changePriority(item, priority);
+       }
+        System.out.println("ArrayHeapMinPQ Total time elapsed: "
+                + sw.elapsedTime() + " seconds.");
+    }
 }
