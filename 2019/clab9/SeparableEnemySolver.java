@@ -8,13 +8,13 @@ public class SeparableEnemySolver {
 
     /**
      * Creates a SeparableEnemySolver for a file with name filename. Enemy
-     * relationships are biderectional (if A is an enemy of B, B is an enemy of A).
+     * relationships are bidirectional (if A is an enemy of B, B is an enemy of A).
      */
     SeparableEnemySolver(String filename) throws java.io.FileNotFoundException {
         this.g = graphFromFile(filename);
     }
 
-    /** Alterntive constructor that requires a Graph object. */
+    /** Alternative constructor that requires a Graph object. */
     SeparableEnemySolver(Graph g) {
         this.g = g;
     }
@@ -23,8 +23,23 @@ public class SeparableEnemySolver {
      * Returns true if input is separable, false otherwise.
      */
     public boolean isSeparable() {
-        // TODO: Fix me
-        return false;
+        boolean isSeparable = true;
+        Map<String, Integer> groups = new HashMap<>();
+        for (String label : g.labels()) {
+            if (!groups.containsKey(label)) {
+                groups.put(label, 1);
+            }
+            for (String neighbor : g.neighbors(label)) {
+                int group = -groups.get(label);
+                if (!groups.containsKey(neighbor)) {
+                    groups.put(neighbor, group);
+                } else if (groups.get(neighbor) != group) {
+                    isSeparable = false;
+                    break;
+                }
+            }
+        }
+        return isSeparable;
     }
 
 
@@ -53,7 +68,7 @@ public class SeparableEnemySolver {
 
     /**
      * Reads an entire CSV and returns a List of Lists. Each inner
-     * List represents a line of the CSV with each comma-seperated
+     * List represents a line of the CSV with each comma-separated
      * value as an entry. Assumes CSV file does not contain commas
      * except as separators.
      * Returns null if invalid filename.
