@@ -16,12 +16,23 @@ public class KDTree {
             this.dimension = dimension % 2;
         }
 
-        public boolean lessOrEqualTo(Point p) {
+        public boolean lessThanOrEqualTo(Point p) {
             switch (dimension) {
                 case 0:
                     return point.getX() <= p.getX();
                 case 1:
                     return point.getY() <= p.getY();
+                default:
+                    throw new IllegalStateException("Illegal Dimension");
+            }
+        }
+
+        public double boundaryDistanceTo(Point p) {
+            switch (dimension) {
+                case 0:
+                    return Math.pow(point.getX() - p.getX(), 2);
+                case 1:
+                    return Math.pow(point.getY() - p.getY(), 2);
                 default:
                     throw new IllegalStateException("Illegal Dimension");
             }
@@ -39,7 +50,7 @@ public class KDTree {
             return new KDNode(p, dimension);
         } else if (root.point.equals(p)) {
             return root;
-        } else if (root.lessOrEqualTo(p)) {
+        } else if (root.lessThanOrEqualTo(p)) {
             root.right = add(root.right, (dimension + 1) % 2, p);
         } else {
             root.left = add(root.left, (dimension + 1) % 2, p);
@@ -52,25 +63,33 @@ public class KDTree {
     }
 
     public Point nearest(double x, double y) {
-        Point source = new Point(x, y);
-        return nearest(root, source, null, Double.MAX_VALUE).point;
+        Point goal = new Point(x, y);
+        return nearest(root, goal, root).point;
     }
 
-    private KDNode nearest(KDNode p, Point source,
-                           KDNode nearestNode, double nearestDistance) {
+    private KDNode nearest(KDNode p, Point goal, KDNode bestNode) {
         if (p == null) {
-            return nearestNode;
+            return bestNode;
         }
-        double distance = Point.distance(p.point, source);
-        if (distance < nearestDistance) {
-            nearestNode = p;
-            nearestDistance = distance;
+        double currentDistance = Point.distance(p.point, goal);
+        double bestDistance = Point.distance(bestNode.point, goal);
+        if (currentDistance < bestDistance) {
+            bestNode = p;
         }
-        nearestNode = nearest(p.left, source, nearestNode, nearestDistance);
-        if (nearestNode != p) {
-            nearestDistance = Point.distance(nearestNode.point, source);
+        KDNode goodSide;
+        KDNode badSide;
+        if (p.lessThanOrEqualTo(goal)) {
+            goodSide = p.right;
+            badSide = p.left;
+        } else {
+            goodSide = p.left;
+            badSide = p.right;
         }
-        nearestNode = nearest(p.right, source, nearestNode, nearestDistance);
-        return nearestNode;
+        bestNode = nearest(goodSide, goal, bestNode);
+        bestDistance = Point.distance(bestNode.point, goal);
+        if (p.boundaryDistanceTo(goal) < bestDistance) {
+            bestNode = nearest(badSide, goal, bestNode);
+        }
+        return bestNode;
     }
 }
