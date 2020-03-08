@@ -1,7 +1,9 @@
 package bearmaps;
 
+import edu.princeton.cs.algs4.Stopwatch;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -58,5 +60,41 @@ public class KDTreeTest {
                         expected, actual);
             }
         }
+    }
+
+    @Test
+    public void timingTest() {
+        Random randomNumberGenerator = new Random(0);
+        int N = 100000;
+        int M = 10000;
+        List<Point> points = new LinkedList<>();
+        for (int i = 0; i < N; i++) {
+            double x = randomNumberGenerator.nextDouble();
+            double y = randomNumberGenerator.nextDouble();
+            Point p = new Point(x, y);
+            points.add(p);
+        }
+
+        Random randomNumberGeneratorA = new Random(1);
+        Stopwatch sw = new Stopwatch();
+        NaivePointSet nn = new NaivePointSet(points);
+        for (int i = 0; i < M; i++) {
+            double x = randomNumberGeneratorA.nextDouble();
+            double y = randomNumberGeneratorA.nextDouble();
+            nn.nearest(x, y);
+        }
+        System.out.println("NaivePointSet Total time elapsed: "
+                + sw.elapsedTime() + " seconds.");
+
+        Random randomNumberGeneratorB = new Random(1);
+        sw = new Stopwatch();
+        KDTree kd = new KDTree(points);
+        for (int i = 0; i < M; i++) {
+            double x = randomNumberGeneratorB.nextDouble();
+            double y = randomNumberGeneratorB.nextDouble();
+            kd.nearest(x, y);
+        }
+        System.out.println("KDTree Total time elapsed: "
+                + sw.elapsedTime() + " seconds.");
     }
 }
