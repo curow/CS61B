@@ -31,10 +31,10 @@ public class KDTreeTest {
 
     @Test
     public void randomTest() {
-        int N = 100;
+        int N = 1;
         Random randomGenerator = new Random(0);
         for (int i = 0; i < N; i++) {
-            int M = randomGenerator.nextInt(1000) + 1;
+            int M = randomGenerator.nextInt(10000) + 1;
             List<Point> points = new LinkedList<>();
             for (int j = 0; j < M; j++) {
                 double x = randomGenerator.nextDouble();
@@ -44,7 +44,7 @@ public class KDTreeTest {
             }
             NaivePointSet nn = new NaivePointSet(points);
             KDTree kd = new KDTree(points);
-            int K = randomGenerator.nextInt(1000) + 1;
+            int K = randomGenerator.nextInt(10000) + 1;
             for (int k = 0; k < K; k++) {
                 double x = randomGenerator.nextDouble();
                 double y = randomGenerator.nextDouble();

@@ -13,10 +13,10 @@ public class NaivePointSet implements PointSet {
 
     public Point nearest(double x, double y) {
         double nearest = Double.MAX_VALUE;
-        Point source = new Point(x, y);
+        Point goal = new Point(x, y);
         Point nearestPoint = null;
         for (Point p : points) {
-            double distance = Point.distance(source, p);
+            double distance = Point.distance(goal, p);
             if (distance < nearest) {
                 nearestPoint = p;
                 nearest = distance;
