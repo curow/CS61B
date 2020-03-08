@@ -40,9 +40,9 @@ public class KDTree {
         } else if (root.point.equals(p)) {
             return root;
         } else if (root.lessOrEqualTo(p)) {
-            root.left = add(root.left, (dimension + 1) % 2, p);
-        } else {
             root.right = add(root.right, (dimension + 1) % 2, p);
+        } else {
+            root.left = add(root.left, (dimension + 1) % 2, p);
         }
         return root;
     }
@@ -53,8 +53,7 @@ public class KDTree {
 
     public Point nearest(double x, double y) {
         Point source = new Point(x, y);
-        double distance = Point.distance(root.point, source);
-        return nearest(root, source, root, distance).point;
+        return nearest(root, source, null, Double.MAX_VALUE).point;
     }
 
     private KDNode nearest(KDNode p, Point source,
@@ -68,6 +67,9 @@ public class KDTree {
             nearestDistance = distance;
         }
         nearestNode = nearest(p.left, source, nearestNode, nearestDistance);
+        if (nearestNode != p) {
+            nearestDistance = Point.distance(nearestNode.point, source);
+        }
         nearestNode = nearest(p.right, source, nearestNode, nearestDistance);
         return nearestNode;
     }

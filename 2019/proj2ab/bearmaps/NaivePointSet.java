@@ -1,13 +1,14 @@
 package bearmaps;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class NaivePointSet implements PointSet {
     private List<Point> points;
 
     public NaivePointSet(List<Point> points) {
-        this.points = new ArrayList<>(points);
+        this.points = new LinkedList<>(points);
     }
 
     public Point nearest(double x, double y) {
