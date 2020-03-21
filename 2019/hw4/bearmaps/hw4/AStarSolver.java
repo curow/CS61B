@@ -53,7 +53,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         if (outcome == SolverOutcome.SOLVED) {
             solutionWeight = distTo.get(end);
             Vertex v = end;
-            while (v != start) {
+            while (!v.equals(start)) {
                 solution.add(0, v);
                 v = edgeTo.get(v);
             }
