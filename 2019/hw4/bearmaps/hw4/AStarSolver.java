@@ -22,7 +22,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         distTo.put(start, .0);
         while (!queue.isEmpty()) {
             Vertex target = queue.removeSmallest();
-            if (target == end) {
+            if (target.equals(end)) {
                 outcome = SolverOutcome.SOLVED;
                 break;
             }
