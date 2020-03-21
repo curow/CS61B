@@ -101,6 +101,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         return size;
     }
 
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
     @Override
     public void changePriority(T item, double priority) {
         if (!contains(item)) {
