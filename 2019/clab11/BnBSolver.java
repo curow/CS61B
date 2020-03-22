@@ -16,17 +16,12 @@ public class BnBSolver {
     public BnBSolver(List<Bear> bears, List<Bed> beds) {
        this.bears = bears;
        this.beds = new ArrayList<>();
-       List<Boolean> occupied = new ArrayList<>(beds.size());
-       for (int i = 0; i < beds.size(); i++) {
-           occupied.add(i, false);
-       }
        for (Bear bear : bears) {
-           int index = 0;
            for (Bed bed : beds) {
-               if (!occupied.get(index) && bear.compareTo(bed) == 0) {
+               if (bear.compareTo(bed) == 0) {
                    this.beds.add(bed);
+                   break;
                }
-               ++index;
            }
        }
     }
