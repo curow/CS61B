@@ -1,3 +1,6 @@
+import com.sun.jdi.connect.spi.TransportService;
+
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,16 +17,33 @@ public class BnBSolver {
     private List<Bed> beds;
 
     public BnBSolver(List<Bear> bears, List<Bed> beds) {
-       this.bears = bears;
-       this.beds = new ArrayList<>();
-       for (Bear bear : bears) {
-           for (Bed bed : beds) {
-               if (bear.compareTo(bed) == 0) {
-                   this.beds.add(bed);
-                   break;
-               }
-           }
-       }
+    }
+
+    private Bear removeRandomBear(List<Bear> bears) {
+        int index = (int) (Math.random() * bears.size());
+        return bears.remove(index);
+    }
+
+    private void partition(Bear bear, List<Bed> beds, List<Bed> less,
+                      List<Bed> equal, List<Bed> greater) {
+        for (Bed bed : beds) {
+            int compare = bear.compareTo(bed);
+            if (compare < 0) {
+                greater.add(bed);
+            } else if (compare > 0) {
+                less.add(bed);
+            } else {
+                equal.add(bed);
+            }
+        }
+    }
+
+    private List<Pair<Bear, Bed>> catenate(List<Pair<Bear, Bed>> l1,
+                                           List<Pair<Bear, Bed>> l2) {
+        List<Pair<Bear, Bed>> lst = new LinkedList<>();
+        lst.addAll(l1);
+        lst.addAll(l2);
+        return lst;
     }
 
     /**
