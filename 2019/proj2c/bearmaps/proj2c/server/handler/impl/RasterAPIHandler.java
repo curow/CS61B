@@ -12,13 +12,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -87,9 +86,83 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         System.out.println("yo, wanna know the parameters given by the web browser? They are:");
         System.out.println(requestParams);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+        double lonDPP = getLonDPP(requestParams);
+        int depth = 0;
+        while (depth <= MAX_DEPTH) {
+            if (getLonDPP(depth) <= lonDPP) {
+                break;
+            }
+            depth++;
+        }
+        results.put("depth", depth);
+        List<Integer> rows = getRows(depth, requestParams.get("ullat"),
+                requestParams.get("lrlat"));
+        List<Integer> cols = getColumns(depth, requestParams.get("ullon"),
+                requestParams.get("lrlon"));
+        if (!rows.isEmpty() && !cols.isEmpty()) {
+            results.put("query_success", true);
+        } else {
+            results.put("query_success", false);
+            return results;
+        }
+        String[][] renderGrid = new String[rows.size()][cols.size()];
+        for (int i = 0; i < rows.size(); i++) {
+            for (int j = 0; j < cols.size(); j++) {
+                renderGrid[i][j] = String.format("d%d_x%d_y%d.png", depth,
+                        cols.get(j), rows.get(i));
+            }
+        }
+        results.put("render_grid", renderGrid);
+
+        double lonDelta = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+        int left = cols.get(0);
+        results.put("raster_ul_lon", ROOT_ULLON + lonDelta * left);
+        int right = cols.get(cols.size() - 1);
+        results.put("raster_lr_lon", ROOT_ULLON + lonDelta * right);
+
+        double latDelta = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+        int up = rows.get(0);
+        results.put("raster_ul_lat", ROOT_ULLAT - latDelta * up);
+        int down = rows.get(rows.size() - 1);
+        results.put("raster_lr_lat", ROOT_ULLAT - latDelta * down);
+
         return results;
+    }
+
+    private List<Integer> getColumns(int depth, double ullon, double lrlon) {
+        if (ullon > lrlon || ullon > ROOT_LRLON || lrlon < ROOT_ULLON) {
+            return new ArrayList<>();
+        }
+        double delta = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+        ullon = Math.max(ullon, ROOT_ULLON) - ROOT_ULLON;
+        lrlon = Math.min(lrlon, ROOT_LRLON) - ROOT_ULLON;
+        int left = (int) (ullon / delta);
+        int right = (int) (lrlon / delta);
+        return IntStream.rangeClosed(left, right).boxed().collect(Collectors.toList());
+    }
+
+    private List<Integer> getRows(int depth, double ullat, double lrlat) {
+        if (ullat < lrlat || ullat < ROOT_LRLAT || lrlat > ROOT_ULLAT) {
+            return new ArrayList<>();
+        }
+        double delta = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+        ullat = ROOT_ULLAT - Math.min(ullat, ROOT_ULLAT);
+        lrlat = ROOT_ULLAT - Math.max(lrlat, ROOT_LRLAT);
+        int up = (int) (ullat / delta);
+        int down = (int) (lrlat / delta);
+        return IntStream.rangeClosed(up, down).boxed().collect(Collectors.toList());
+    }
+
+    private double getLonDPP(int depth) {
+        assert depth >= 0 && depth <= MAX_DEPTH;
+        return (ROOT_LRLON - ROOT_ULLON) / TILE_SIZE / Math.pow(2, depth);
+    }
+
+    private double getLonDPP(Map<String, Double> requestParams) {
+        double width = requestParams.get("w");
+        double ullon = requestParams.get("ullon");
+        double lrlon = requestParams.get("lrlon");
+        return (lrlon - ullon) / width;
     }
 
     @Override
