@@ -88,7 +88,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         Map<String, Object> results = new HashMap<>();
         double lonDPP = getLonDPP(requestParams);
         int depth = 0;
-        while (depth <= MAX_DEPTH) {
+        while (depth < MAX_DEPTH) {
             if (getLonDPP(depth) <= lonDPP) {
                 break;
             }
@@ -118,13 +118,13 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         int left = cols.get(0);
         results.put("raster_ul_lon", ROOT_ULLON + lonDelta * left);
         int right = cols.get(cols.size() - 1);
-        results.put("raster_lr_lon", ROOT_ULLON + lonDelta * right);
+        results.put("raster_lr_lon", ROOT_ULLON + lonDelta * (right + 1));
 
         double latDelta = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
         int up = rows.get(0);
         results.put("raster_ul_lat", ROOT_ULLAT - latDelta * up);
         int down = rows.get(rows.size() - 1);
-        results.put("raster_lr_lat", ROOT_ULLAT - latDelta * down);
+        results.put("raster_lr_lat", ROOT_ULLAT - latDelta * (down + 1));
 
         return results;
     }
